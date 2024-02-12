@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Function to check disk space
+check_disk_space() {
+    echo "Disk Space Usage:"
+    df -h
+}
+
+# Function to find the largest files
+find_largest_files() {
+    echo "Largest Files:"
+    find / -type f -exec du -h {} + 2>/dev/null | sort -rh | head -n 10
+}
+
+# Main function
+main() {
+    check_disk_space
+    echo
+    find_largest_files
+}
+
+# Execute the main function
+main

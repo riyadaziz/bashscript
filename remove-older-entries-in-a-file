@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Array of log file paths
+
+LOG_FILES=(
+
+"/var/log/mylogfile1.log"
+
+"/var/log/mylogfile2.log"
+
+"/var/log/mylogfile3.log"
+
+# Add more log files as needed
+
+)
+
+# Number of lines to keep
+
+LINES_TO_KEEP=100
+
+# Loop through each log file
+
+for logfile in "${LOG_FILES[@]}"; do
+
+# Check if the log file exists
+
+if [ ! -f "$logfile" ]; then
+
+echo "Log file not found: $logfile"
+
+continue
+
+fi
+
+# Get the number of lines in the log file
+
+num_lines=$(wc -l < "$logfile")
+
+# If the number of lines exceeds the threshold, truncate the file
+
+if [ "$num_lines" -gt "$LINES_TO_KEEP" ]; then
+
+# Calculate the number of lines to remove
+
+lines_to_remove=$((num_lines - LINES_TO_KEEP))
+
+# Remove old entries
+
+tail -n "$LINES_TO_KEEP" "$logfile" > "$logfile.tmp" && mv "$logfile.tmp" "$logfile"
+
+echo "Old entries removed from $logfile"
+
+else
+
+echo "No need to remove old entries from $logfile"
+
+fi
+
+done
